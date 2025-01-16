@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --terminal-blue: #0066ff;
+  --terminal-blue-dim: #003399;
+  --terminal-blue-bright: #0099ff;
+  --terminal-bg: #000033;
+  --pixel-size: 4px;
+  --pixel-spacing: 8px;
+  --scanline-size: 2px;
+}
+
+body {
+  background-color: var(--terminal-bg);
+  color: var(--terminal-blue);
+  font-family: 'JetBrains Mono', monospace;
+  image-rendering: pixelated;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* CRT Scanline Effect */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) var(--scanline-size),
+    transparent var(--scanline-size),
+    transparent calc(var(--scanline-size) * 2)
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+.terminal-box {
+  border: 0;
+  position: relative;
+  background: #000000;
+  image-rendering: pixelated;
+  margin-bottom: var(--pixel-spacing);
+  box-shadow: 
+    calc(var(--pixel-size) * 2) calc(var(--pixel-size) * 2) 0 rgba(0, 0, 0, 0.5),
+    inset 0 0 calc(var(--pixel-size) * 2) rgba(0, 102, 255, 0.2);
+}
+
+.terminal-box::before {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--pixel-size));
+  left: calc(-1 * var(--pixel-size));
+  right: calc(-1 * var(--pixel-size));
+  bottom: calc(-1 * var(--pixel-size));
+  background: var(--terminal-blue-bright);
+  z-index: -1;
+  clip-path: polygon(
+    0 var(--pixel-size), var(--pixel-size) 0,
+    calc(100% - var(--pixel-size)) 0, 100% var(--pixel-size),
+    100% calc(100% - var(--pixel-size)), calc(100% - var(--pixel-size)) 100%,
+    var(--pixel-size) 100%, 0 calc(100% - var(--pixel-size))
+  );
+}
+
+.terminal-header {
+  background: var(--terminal-blue);
+  color: var(--terminal-bg);
+  padding: var(--pixel-spacing);
+  font-weight: bold;
+  clip-path: polygon(
+    0 0,
+    100% 0,
+    calc(100% - var(--pixel-size)) 100%,
+    var(--pixel-size) 100%
+  );
+}
+
+.pixel-text {
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: var(--pixel-size) var(--pixel-size) 0 rgba(0, 0, 0, 0.5);
+  letter-spacing: 1px;
+}
+
+.pixel-title {
+  font-size: 24px;
+  margin-bottom: calc(var(--pixel-spacing) * 2);
+  color: var(--terminal-blue-bright);
+  text-transform: uppercase;
+}
+
+.pixel-subtitle {
+  font-size: 14px;
+  color: var(--terminal-blue);
+  opacity: 0.8;
+}
+
+/* Pixel art buttons */
+.pixel-button {
+  font-family: 'Press Start 2P', monospace;
+  border: var(--pixel-size) solid var(--terminal-blue-bright);
+  background: #000000;
+  padding: var(--pixel-spacing);
+  color: var(--terminal-blue);
+  transition: none;
+  image-rendering: pixelated;
+  font-size: 12px;
+  position: relative;
+  text-shadow: none;
+}
+
+.pixel-button::after {
+  content: '';
+  position: absolute;
+  top: var(--pixel-size);
+  left: var(--pixel-size);
+  right: calc(var(--pixel-size) * -1);
+  bottom: calc(var(--pixel-size) * -1);
+  background: var(--terminal-blue-dim);
+  z-index: -1;
+}
+
+.pixel-input {
+  font-family: 'JetBrains Mono', monospace;
+  border: var(--pixel-size) solid var(--terminal-blue-bright);
+  background: #000000;
+  padding: calc(var(--pixel-spacing) * 1.5);
+  color: var(--terminal-blue-bright);
+  font-size: 14px;
+  line-height: 1.5;
+  width: 100%;
+  resize: none;
+}
+
+.pixel-input::placeholder {
+  color: var(--terminal-blue-dim);
+  opacity: 0.7;
+}
+
+.pixel-button:hover:not(:disabled) {
+  background: var(--terminal-blue);
+  color: var(--terminal-bg);
+  transform: translate(var(--pixel-size), var(--pixel-size));
+  box-shadow: 
+    calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 rgba(255, 255, 255, 0.2),
+    inset calc(var(--pixel-size) * -1) calc(var(--pixel-size) * -1) 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Pixel art scrollbar */
+.terminal-scrollbar::-webkit-scrollbar {
+  width: calc(var(--pixel-size) * 4);
+  height: calc(var(--pixel-size) * 4);
+}
+
+.terminal-scrollbar::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+  image-rendering: pixelated;
+}
+
+.terminal-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--terminal-blue-dim);
+  border: var(--pixel-size) solid var(--terminal-blue);
+}
+
+.terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-blue);
+  image-rendering: pixelated;
+}
